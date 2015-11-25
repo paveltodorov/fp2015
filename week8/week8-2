@@ -1,0 +1,83 @@
+#lang racket
+(define (sum-divisors n)
+  (define (sum-divisors-iter n i res)
+    (cond [(= i n) res]
+          [(= (remainder n i) 0)  (sum-divisors-iter n (+ i 1) (+ i res)) ]
+          [else (sum-divisors-iter n (+ i 1) res)]))
+  (sum-divisors-iter n 1 0))
+
+(define (interesting? n)
+  (=  (sum-divisors (sum-divisors n)) n))
+
+(define(sum-interesting n)
+  (define(sum-interesting-iter n i res)
+    (cond
+      [(> i n) res]
+      [(interesting? i) (sum-interesting-iter n (+ i 1)  (+ i res))]
+      [else(sum-interesting-iter n (+ i 1)  res)]))
+  (sum-interesting-iter n 1 0))
+
+(define (zero matrix)
+  (cond
+    [(empty? matrix) '()]
+    [(member 0 (car matrix)) (cons(map (lambda(x) 0)  (car matrix)) (zero (cdr matrix)))]
+    [else(cons (car matrix)(zero (cdr matrix)))]))
+
+(define (nozeroes? n)
+  (cond
+    [(= n 0) #t]
+    [(= (remainder n 10) 0) #f]
+    [else(nozeroes? (quotient n 10))]))
+
+(define (sum-digits n)
+  (define (sum-digits-iter n res)
+    (cond
+      [(= n 0) res]
+      [else(sum-digits-iter (quotient n 10) (+ res (remainder n 10)))]))
+   (sum-digits-iter n 0))
+
+(define (prod-digits n)
+  (define (prod-digits-iter n res)
+    (cond
+      [(= n 0) res]
+      [else(prod-digits-iter (quotient n 10) (* res (remainder n 10)))]))
+   (prod-digits-iter n 1))
+
+(define (digits-sum n)
+  (define a  (/(- (expt 10 n) 1)9))
+(define (digits-sum-iter i res)
+  (cond
+   [(> i a) res]
+   [ (and (= (sum-digits i) n) (nozeroes? i)) (digits-sum-iter (+ i 1) (+ i res))]
+   [else(digits-sum-iter (+ i 1) res)]))
+  (digits-sum-iter n 0))
+
+(define (int-lenght n)
+(define (int-lenght-iter n i)
+(cond
+  [(= n 0) i]
+  [else(int-lenght-iter (quotient n 10) (+ 1 i))]))
+  (int-lenght-iter n 0))
+
+(define (fact n)
+  (define (fact-iter i result)
+    (if (> i n) result
+        (fact-iter (+ i 1) (* result i))))
+  (fact-iter 1 1))
+
+(define (all-permutations? l)
+ (and (apply = (map int-lenght l)) (apply = (cons (fact (int-lenght (car l))) (map prod-digits l)))))
+
+(define (pos-elem el l)
+  (define (pos-elem-iter el l res)
+ (cond
+   [(empty? l) res]
+   [(equal? (car l) el) res]
+   [else(pos-elem-iter el (cdr l) (+ res 1))]))
+ (pos-elem-iter el l 0))
+
+(define(cycle times items)
+  (lambda (x)
+    (cond
+      [(not (member x items)) -1]
+      [else (remainder (+ (pos-elem x items) times) (length items))])))
