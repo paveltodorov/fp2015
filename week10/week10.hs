@@ -16,7 +16,7 @@ contain :: Int -> Int -> Bool
 contain x y 
  | x == 0 = False
  | mod x 10 == y = True
- N| otherwise = contain (div x 10) y
+ | otherwise = contain (div x 10) y
 
 containsDigits :: Int -> Int -> Bool
 containsDigits x y
