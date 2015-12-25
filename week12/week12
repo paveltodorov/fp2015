@@ -1,0 +1,42 @@
+listToNumber :: [Int] -> Int 
+listToNumber = listToNumber' 0
+ where 
+  listToNumber':: Int -> [Int] -> Int
+  listToNumber' res [] = res
+  listToNumber' res (x:xs)  = listToNumber'  (res*10 + x) xs
+
+suffix :: (Eq a, Num a) => [a] -> [a] -> Bool 
+suffix xs ys = null . filter (/= 0) $ zipWith (-) xs yss
+ where
+ 	l = (length ys - length xs)
+ 	yss = drop l ys
+
+numberOfOcurrencies :: Int -> [Int] ->Int
+numberOfOcurrencies el xs  = length [x | x <- xs , x == el ]
+
+--алтернативна дефиниция на numberOfOcurrencies
+numberOfOcurrencies' :: Int -> [Int] ->Int
+numberOfOcurrencies' el = length . filter (== el)
+
+ocurrences :: [Int] -> [Int] -> [Int]
+ocurrences l1 l2 = [numberOfOcurrencies x l2 | x <- l1 ]
+
+removeAt :: Int -> [a] -> [a]
+removeAt i xs  
+ |i < 0 || i >= length xs = error "Index out of range"
+ |otherwise = fst ys ++ tail (snd ys)
+   where 
+    ys = splitAt i xs 
+
+--алтернативна дефиниция с рекурсия 
+removeAt' :: Int -> [a] -> [a]
+removeAt' i (x:xs)  
+ |i < 0 || i >= length (x:xs) = error "Index out of range"
+ |i == 0 = xs
+ |otherwise = x : removeAt' (i - 1) xs 
+
+--трета възможна дефиниция
+removeAt'' :: Int -> [a] -> [a]
+removeAt'' i xs  
+ |i < 0 || i >= length xs = error "Index out of range"
+ |otherwise = take i xs ++ drop (i + 1) xs
