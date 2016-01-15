@@ -1,0 +1,40 @@
+import Data.List
+
+toList :: Int -> [Int] --reversed to list
+toList 0 = []
+toList x = (mod x 10) : toList (div x 10)
+
+sumOfDigits = sum . toList
+
+toNumber :: [Int] -> Int
+toNumber = toNumber' 0 
+ where 
+ toNumber' res [] = res
+ toNumber' res (x:xs) =toNumber' (res*10 + x) xs
+
+unique :: Ord a => [a] -> [a]
+unique = (map head) . group . sort
+
+removeZeroes :: [Int] -> [Int]
+removeZeroes = filter (/=0)
+
+
+mergeAndSortDigits :: Int -> Int ->Int
+mergeAndSortDigits x y 
+ | sx < sy =  toNumber ss
+ | otherwise = toNumber $ reverse ss
+ where
+  sx = sumOfDigits x
+  sy = sumOfDigits y
+  ss = removeZeroes $ unique $ sort(toList x ++ toList y)
+
+repeater :: String -> Int -> String -> String
+repeater str 1 glue = str 
+repeater str count glue = str ++ glue ++ (repeater str (count - 1) glue)
+
+data Tree a = Empty | Node a (Tree a) (Tree a)
+
+--levelSum :: Tree Int->Int -> Int 
+levelSum Empty _ = 0
+levelSum (Node q l r) 1 = q
+levelSum (Node q l r) count = levelSum l (count - 1) + levelSum r (count - 1)
