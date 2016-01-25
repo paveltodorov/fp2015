@@ -1,0 +1,36 @@
+#lang racket
+(require "trees.rkt")
+(define (bst-insert x tree)
+  (cond
+ [(empty-tree? tree) (make-leaf x)]
+ [(= x (car tree)) tree]
+ [(< x (car tree)) (make-tree (car tree) (bst-insert x (left tree)) (right tree))]
+ [(> x (car tree)) (make-tree (car tree) (left tree) (bst-insert x (right tree)))]))
+
+(define t
+  (make-tree 9
+    (make-tree 8
+      (make-leaf 7)
+      (make-leaf 8.5))
+    (make-leaf 10)))
+
+(define (bst-element? x tree)
+(cond
+  [(empty-tree? tree) #f]
+  [ (= x (car tree)) #t]
+  [else( or (bst-element? x (left tree)) (bst-element? x (right tree)))]))
+ 
+(define (bst->list tree)
+  (cond
+    [(empty-tree? tree) '()]
+    [(leaf? tree) (list (root tree))]
+   [else(append (bst->list (left tree)) (list(root tree)) (bst->list (right tree)))]))
+
+
+(define (bst? tree)
+  (cond
+  [(empty-tree? tree) #t]
+  [(leaf? tree) #t]
+  [(empty-tree?  (left tree)) (and (> (root (right tree))(root tree)) (bst? (right tree)))]
+  [(empty-tree? (right tree)) (and (< (root (left tree)) (root tree)) (bst? (left tree)))]
+  [else(and   (< (root (left tree)) (root tree)) (> (root (right tree)) (root tree)) (bst? (left tree)) (bst? (right tree)))]))
