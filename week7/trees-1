@@ -26,7 +26,6 @@
     [(leaf? tree) (list (root tree))]
    [else(append (bst->list (left tree)) (list(root tree)) (bst->list (right tree)))]))
 
-
 (define (bst? tree)
   (cond
   [(empty-tree? tree) #t]
